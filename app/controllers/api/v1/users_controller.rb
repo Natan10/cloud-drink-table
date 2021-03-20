@@ -1,6 +1,6 @@
 module Api
   module V1
-    class UserController < ApiController
+    class UsersController < ApiController
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_error
       
