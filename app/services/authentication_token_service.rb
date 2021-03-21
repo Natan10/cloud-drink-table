@@ -10,7 +10,7 @@ class AuthenticationTokenService
 
   def self.decode(token)
     decoded_token = JWT.decode token, TOKEN_SECRET, true, { algorithm: TOKEN_TYPE }
-    decoded_token
+    decoded_token[0]
   end
 
 end
