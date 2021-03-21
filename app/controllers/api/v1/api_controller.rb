@@ -3,12 +3,10 @@ module Api
     class ApiController < ApplicationController
       before_action :authenticate_user
 
-
-    private 
+      private
 
       def token_request
-        token = request.headers['Authorization'].split(' ')[1]
-        token
+        request.headers["Authorization"].split(" ")[1]
       end
 
       def authenticate_user
@@ -18,7 +16,6 @@ module Api
       rescue ActiveRecord::RecordNotFound
         head :unauthorized
       end
-
     end
   end
 end

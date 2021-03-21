@@ -3,12 +3,12 @@ module Api
     class AuthenticationController < ApiController
       class AuthenticationError < StandardError; end
       skip_before_action :authenticate_user
-      
+
       rescue_from AuthenticationError, with: :handle_unauthenticated
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordNotFound, with: :verify_user
 
-      def create 
+      def create
         user = User.find_by(email: user_params[:email])
         raise ActiveRecord::RecordNotFound if user.nil?
         raise AuthenticationError unless user.authenticate(user_params[:password])
@@ -20,8 +20,7 @@ module Api
       private
 
       def user_params
-        user = params.require(:user).permit(:email,:password)
-        user
+        params.require(:user).permit(:email, :password)
       end
 
       def handle_unauthenticated
@@ -39,7 +38,6 @@ module Api
           error: e.message
         }, status: :unprocessable_entity
       end
-
     end
   end
 end
