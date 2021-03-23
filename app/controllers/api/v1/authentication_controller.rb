@@ -1,17 +1,16 @@
 module Api
   module V1
     class AuthenticationController < ApiController
-      class AuthenticationError < StandardError; end
       skip_before_action :authenticate_user
 
-      rescue_from AuthenticationError, with: :handle_unauthenticated
+      rescue_from Exceptions::AuthenticationError, with: :handle_unauthenticated
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordNotFound, with: :verify_user
 
       def create
         user = User.find_by(email: user_params[:email])
         raise ActiveRecord::RecordNotFound if user.nil?
-        raise AuthenticationError unless user.authenticate(user_params[:password])
+        raise Exceptions::AuthenticationError unless user.authenticate(user_params[:password])
         token = AuthenticationTokenService.encode(user.id)
 
         render json: {token: token}, status: :created
