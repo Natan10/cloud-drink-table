@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < ApiController
-      skip_before_action :authenticate_user, only:[:create]
+      skip_before_action :authenticate_user, only: [:create]
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_error
 

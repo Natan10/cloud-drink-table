@@ -1,3 +1,3 @@
 module Exceptions
-  class AuthenticationError < StandardError ; end
+  class AuthenticationError < StandardError; end
 end
