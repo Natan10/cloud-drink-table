@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :consumer do
-    name { "MyString" }
-    account { nil }
+    name { Faker::Name.name }
+    total_consumed { Faker::Number.number(digits: 3) }
+    account
   end
 end
