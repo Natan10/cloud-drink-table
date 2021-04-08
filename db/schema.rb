@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_28_224407) do
+ActiveRecord::Schema.define(version: 2021_04_08_035832) do
 
   create_table "accounts", force: :cascade do |t|
     t.decimal "total_account", default: "0.0", null: false
@@ -24,10 +24,10 @@ ActiveRecord::Schema.define(version: 2021_03_28_224407) do
 
   create_table "consumers", force: :cascade do |t|
     t.string "name", null: false
-    t.decimal "total_consumed", default: "0.0", null: false
     t.integer "account_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "total_consumed_cents", precision: 14, scale: 2, default: "0.0"
     t.index ["account_id"], name: "index_consumers_on_account_id"
   end
 
