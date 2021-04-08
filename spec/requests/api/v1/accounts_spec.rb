@@ -49,7 +49,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
         expect(response).to have_http_status(201)
         expect(response.body).to include_json({
           id: 1,
-          total_account: "0.0",
+          total_account_cents: "0.0",
           status: "open",
           description: "Testando 1",
           user_id: 1

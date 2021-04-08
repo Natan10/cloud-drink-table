@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Account, type: :model do
-  it { should validate_numericality_of(:total_account) }
+  it { should validate_numericality_of(:total_account_cents) }
 
   describe "create account" do
     context "valid params" do
