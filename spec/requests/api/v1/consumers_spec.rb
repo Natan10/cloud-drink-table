@@ -77,16 +77,68 @@ RSpec.describe "Api::V1::Consumers", type: :request do
   describe 'update' do 
     let(:create_consumer) {create(:consumer,account: account)}
 
-    it 'name' do 
-      consumer = create_consumer
-      params = {
-        name: "CIBORGUE"
-      }
+    context 'valid params' do 
+      it 'name' do 
+        token = auth_user 
+        consumer = create_consumer
+        params = {
+          name: "CIBORGUE"
+        }
 
-      patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}"
+        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+        headers: {"Authorization": "Bearer #{token}"},
+        params: {consumer: params }
+        
+        expect(response).to have_http_status(:ok)  
+      end
+    end
+
+    context 'invalid params' do 
+      it 'whitout params' do 
+        token = auth_user 
+        consumer = create_consumer
+        
+
+        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+        headers: {"Authorization": "Bearer #{token}"},
+        params: {consumer: {} }
+        
+        expect(response).to have_http_status(:unprocessable_entity)  
+      end
+
+      it 'wrong id' do 
+        token = auth_user 
       
+        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/999",
+        headers: {"Authorization": "Bearer #{token}"},
+        params: {consumer: {} }
 
+        expect(response).to have_http_status(:not_found)  
+        expect(response.body).to include_json({
+          "error" => "Couldn't find Consumer with 'id'=999"
+        })
+      end
     end
   end
 
+  describe 'delete' do 
+    it 'return 200' do 
+      token = auth_user
+      consumer = create(:consumer,account: account)
+
+      delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+      headers: {"Authorization": "Bearer #{token}"}
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'return 404' do 
+      token = auth_user
+      
+      delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/500",
+      headers: {"Authorization": "Bearer #{token}"}
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
