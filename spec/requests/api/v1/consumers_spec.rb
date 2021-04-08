@@ -1,35 +1,26 @@
 require "rails_helper"
 
-'''
-post /api/users/:user_id/accounts/:account_id/consumers
-patch /api/users/:user_id/accounts/:account_id/consumers/:id
-put /api/users/:user_id/accounts/:account_id/consumers/:id
-delete /api/users/:user_id/accounts/:account_id/consumers/:id
-'''
-
-RSpec.describe "Api::V1::Consumers", type: :request do 
-
+RSpec.describe "Api::V1::Consumers", type: :request do
   subject(:auth_user) do
     post "/api/authentication", params: {user: {email: user.email, password: user.password}}
     token = response.body
     JSON.parse(token)["token"]
   end
   let(:user) { create(:user) }
-  let(:account) {create(:account,user: user)}
-  
+  let(:account) { create(:account, user: user) }
 
-  describe 'create' do    
-    context 'valid params' do 
-      it 'return created' do 
-        token = auth_user 
+  describe "create" do
+    context "valid params" do
+      it "return created" do
+        token = auth_user
         params = {
-          name: 'Natan',
+          name: "Natan",
           account_id: account.id
         }
 
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
-        headers: {"Authorization": "Bearer #{token}"},
-        params: {consumer: params }
+          headers: {"Authorization": "Bearer #{token}"},
+          params: {consumer: params}
 
         expect(response).to have_http_status(:created)
         expect(response.body).to include_json({
@@ -37,83 +28,81 @@ RSpec.describe "Api::V1::Consumers", type: :request do
           name: "Natan",
           total_consumed: "0.0",
           account_id: 1
-        })  
+        })
       end
     end
 
-    context 'invalid params' do 
-      it 'without account' do 
-        token = auth_user 
+    context "invalid params" do
+      it "without account" do
+        token = auth_user
         params = {
-          name: 'Natan'
+          name: "Natan"
         }
-  
+
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
-        headers: {"Authorization": "Bearer #{token}"},
-        params: {consumer: params }
-        
+          headers: {"Authorization": "Bearer #{token}"},
+          params: {consumer: params}
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json({
           "error" => "Validation failed: Account must exist"
         })
       end
 
-      it 'without params' do 
-        token = auth_user 
+      it "without params" do
+        token = auth_user
 
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
-        headers: {"Authorization": "Bearer #{token}"},
-        params: {consumer: {} }
+          headers: {"Authorization": "Bearer #{token}"},
+          params: {consumer: {}}
 
- 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json({
           "error" => "param is missing or the value is empty: consumer"
         })
       end
-    end 
+    end
   end
 
-  describe 'update' do 
-    let(:create_consumer) {create(:consumer,account: account)}
+  describe "update" do
+    let(:create_consumer) { create(:consumer, account: account) }
 
-    context 'valid params' do 
-      it 'name' do 
-        token = auth_user 
+    context "valid params" do
+      it "name" do
+        token = auth_user
         consumer = create_consumer
         params = {
           name: "CIBORGUE"
         }
 
         patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
-        headers: {"Authorization": "Bearer #{token}"},
-        params: {consumer: params }
-        
-        expect(response).to have_http_status(:ok)  
+          headers: {"Authorization": "Bearer #{token}"},
+          params: {consumer: params}
+
+        expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'invalid params' do 
-      it 'whitout params' do 
-        token = auth_user 
+    context "invalid params" do
+      it "whitout params" do
+        token = auth_user
         consumer = create_consumer
-        
 
         patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
-        headers: {"Authorization": "Bearer #{token}"},
-        params: {consumer: {} }
-        
-        expect(response).to have_http_status(:unprocessable_entity)  
+          headers: {"Authorization": "Bearer #{token}"},
+          params: {consumer: {}}
+
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'wrong id' do 
-        token = auth_user 
-      
-        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/999",
-        headers: {"Authorization": "Bearer #{token}"},
-        params: {consumer: {} }
+      it "wrong id" do
+        token = auth_user
 
-        expect(response).to have_http_status(:not_found)  
+        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/999",
+          headers: {"Authorization": "Bearer #{token}"},
+          params: {consumer: {}}
+
+        expect(response).to have_http_status(:not_found)
         expect(response.body).to include_json({
           "error" => "Couldn't find Consumer with 'id'=999"
         })
@@ -121,22 +110,22 @@ RSpec.describe "Api::V1::Consumers", type: :request do
     end
   end
 
-  describe 'delete' do 
-    it 'return 200' do 
+  describe "delete" do
+    it "return 200" do
       token = auth_user
-      consumer = create(:consumer,account: account)
+      consumer = create(:consumer, account: account)
 
       delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
-      headers: {"Authorization": "Bearer #{token}"}
+        headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:ok)
     end
 
-    it 'return 404' do 
+    it "return 404" do
       token = auth_user
-      
+
       delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/500",
-      headers: {"Authorization": "Bearer #{token}"}
+        headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:not_found)
     end

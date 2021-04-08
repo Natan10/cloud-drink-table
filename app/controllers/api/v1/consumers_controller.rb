@@ -1,33 +1,32 @@
 module Api
   module V1
     class ConsumersController < ApiController
-
-      before_action :set_consumer, only: [:update,:destroy]
+      before_action :set_consumer, only: [:update, :destroy]
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
 
-      def create 
+      def create
         @consumer = Consumer.create!(consumer_params)
         render json: @consumer, status: :created
       end
 
-      def update 
+      def update
         @consumer.update!(consumer_params)
         head :ok
       end
 
-      def destroy 
+      def destroy
         @consumer.destroy
         head :ok
       end
 
-      private 
+      private
 
       def consumer_params
-        params.require(:consumer).permit(:name,:total_consumed,:account_id)
+        params.require(:consumer).permit(:name, :total_consumed, :account_id)
       end
-      
+
       def set_consumer
         @consumer = Consumer.find(params[:id])
       end
