@@ -26,7 +26,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
         expect(response.body).to include_json({
           id: 1,
           name: "Natan",
-          total_consumed: "0.0",
+          total_consumed_cents: "0.0",
           account_id: 1
         })
       end
