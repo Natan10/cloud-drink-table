@@ -13,4 +13,9 @@ class Item < ApplicationRecord
     less_than_or_equal_to: 100
   }
 
+   
+  def total_price 
+    quantity * price_cents
+  end
+
 end
