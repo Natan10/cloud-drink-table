@@ -9,6 +9,11 @@ RSpec.describe Item, type: :model do
   it { should validate_numericality_of(:quantity) }
   it { should validate_presence_of(:name) }
 
+  it 'total price' do 
+    item = create(:item,quantity: 3,price_cents: 100,consumer: consumer) 
+    expect(item.total_price).to eq(300.0)
+  end
+
   describe 'create item' do 
     context 'valid params ' do 
       it 'valid consumer' do 
