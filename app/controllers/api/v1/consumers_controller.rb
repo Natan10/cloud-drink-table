@@ -7,12 +7,12 @@ module Api
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
 
       def show
-        render json: @consumer.to_json(include: [:items])
+        render :show 
       end
 
       def create
         @consumer = Consumer.create!(consumer_params)
-        render json: @consumer, status: :created
+        render :create, status: :created
       end
 
       def update
