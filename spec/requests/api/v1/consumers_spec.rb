@@ -113,29 +113,28 @@ RSpec.describe "Api::V1::Consumers", type: :request do
   describe "show" do
     let(:consumer) { create(:consumer, account: account) }
 
-    it 'valid id' do 
+    it "valid id" do
       token = auth_user
-      create_list(:item,3,consumer: consumer)
+      create_list(:item, 3, consumer: consumer)
 
       get "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
-      headers: {"Authorization": "Bearer #{token}"}
-      expect(response).to have_http_status(200)  
+        headers: {"Authorization": "Bearer #{token}"}
+      expect(response).to have_http_status(200)
     end
-    
-    it 'invalid id' do 
+
+    it "invalid id" do
       token = auth_user
-      create_list(:item,3,consumer: consumer)
+      create_list(:item, 3, consumer: consumer)
 
       get "/api/users/#{user.id}/accounts/#{account.id}/consumers/5",
-      headers: {"Authorization": "Bearer #{token}"}
+        headers: {"Authorization": "Bearer #{token}"}
 
-      expect(response).to have_http_status(404) 
+      expect(response).to have_http_status(404)
       expect(response.body).to include_json({
         "error" => "Couldn't find Consumer with 'id'=5"
       })
     end
   end
-  
 
   describe "delete" do
     it "return 200" do
