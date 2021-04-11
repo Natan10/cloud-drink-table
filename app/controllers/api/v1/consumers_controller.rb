@@ -1,10 +1,14 @@
 module Api
   module V1
     class ConsumersController < ApiController
-      before_action :set_consumer, only: [:update, :destroy]
+      before_action :set_consumer, only: [:show,:update, :destroy]
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
+
+      def show 
+        render json: @consumer.to_json(include: [:items])
+      end
 
       def create
         @consumer = Consumer.create!(consumer_params)

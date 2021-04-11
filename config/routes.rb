@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     scope module: :v1 do
       resources :users, only: [:create] do
         resources :accounts, only: [:index, :create, :destroy] do
-          resources :consumers, only: [:create, :update, :destroy] do
+          resources :consumers, only: [:show, :create, :update, :destroy] do
             resources :items, only: [:create, :update, :destroy]
           end
         end
