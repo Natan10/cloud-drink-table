@@ -21,7 +21,10 @@ RSpec.describe "Api::V1::Accounts", type: :request do
         accounts
         get "/api/users/#{user.id}/accounts", headers: {"Authorization": "Bearer #{token}"}
 
+        accounts = JSON.parse(response.body)
         expect(response).to have_http_status(200)
+        expect(accounts["user"]["accounts"].count).to eq(3)
+        
       end
     end
 
@@ -48,11 +51,13 @@ RSpec.describe "Api::V1::Accounts", type: :request do
 
         expect(response).to have_http_status(201)
         expect(response.body).to include_json({
-          id: 1,
-          total_account_cents: "0.0",
-          status: "open",
-          description: "Testando 1",
-          user_id: 1
+          "account": {
+            id: 1,
+            user: 1,
+            description: "Testando 1",
+            status: "open",
+            total_account: "0.0",
+          }
         })
       end
     end
