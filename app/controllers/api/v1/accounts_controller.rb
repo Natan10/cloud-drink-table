@@ -8,13 +8,12 @@ module Api
 
       def index
         @accounts = Account.where(user_id: @current_user.id)
-        render json: {accounts: @accounts.to_json(only: [:id, :status, :description])}
+        render :index
       end
 
       def create
         @account = Account.create!(account_params)
-        render json: @account.to_json(only: [:id, :status, :description, :total_account_cents, :user_id]),
-               status: :created
+        render :create, status: :created
       end
 
       def destroy
