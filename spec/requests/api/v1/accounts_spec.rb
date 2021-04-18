@@ -54,7 +54,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
             user: 1,
             description: "Testando 1",
             status: "open",
-            total_account: "0.0",
+            total_account: "0.0"
           }
         })
       end
@@ -84,8 +84,8 @@ RSpec.describe "Api::V1::Accounts", type: :request do
 
         post "/api/users/5/accounts",
           headers: {"Authorization": "Bearer #{token}"},
-           params: {account: account}
-      
+          params: {account: account}
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to eq({
           "error" => "Validation failed: User must exist"

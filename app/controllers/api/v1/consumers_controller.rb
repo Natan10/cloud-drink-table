@@ -7,7 +7,7 @@ module Api
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
 
       def show
-        render :show 
+        render :show
       end
 
       def create

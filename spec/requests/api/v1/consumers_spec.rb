@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       it "return created" do
         token = auth_user
         params = {
-          name: "Natan",
+          name: "Natan"
         }
 
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers",

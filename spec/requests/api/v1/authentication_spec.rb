@@ -24,7 +24,7 @@ RSpec.describe "Api::V1::Authentications", type: :request do
 
       it "params missing" do
         post "/api/authentication", params: {}
-        
+
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

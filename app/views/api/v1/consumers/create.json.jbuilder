@@ -1,4 +1,1 @@
-json.consumer @consumer, partial: '/api/partials/consumer', as: :consumer 
-
-
-
+json.consumer @consumer, partial: "/api/partials/consumer", as: :consumer
