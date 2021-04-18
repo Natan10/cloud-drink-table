@@ -17,8 +17,7 @@ RSpec.describe "Api::V1::Items", type: :request do
         params = {
           name: "Cerveja Preta",
           quantity: 3,
-          price: 15,
-          consumer_id: consumer.id
+          price: 15
         }
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
           headers: {"Authorization": "Bearer #{token}"},
@@ -48,14 +47,14 @@ RSpec.describe "Api::V1::Items", type: :request do
         })
       end
 
-      it "whitout consumer_id" do
+      it "invalid consumer_id" do
         token = auth_user
         params = {
           name: "Cerveja Preta",
           quantity: 3,
           price_cents: 18.50
         }
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
+        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/50/items",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 

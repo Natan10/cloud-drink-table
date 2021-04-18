@@ -7,7 +7,7 @@ module Api
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
 
       def create
-        @item = Item.create!(item_params)
+        @item = Item.create!(create_params)
         render json: @item.to_json, status: :created
       end
 
@@ -25,6 +25,10 @@ module Api
 
       def item_params
         params.require(:item).permit(:name, :quantity, :price, :consumer_id)
+      end
+
+      def create_params
+        item_params.merge(consumer_id: params[:consumer_id])
       end
 
       def set_item
