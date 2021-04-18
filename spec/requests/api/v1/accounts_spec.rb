@@ -24,7 +24,6 @@ RSpec.describe "Api::V1::Accounts", type: :request do
         accounts = JSON.parse(response.body)
         expect(response).to have_http_status(200)
         expect(accounts["user"]["accounts"].count).to eq(3)
-        
       end
     end
 
@@ -41,8 +40,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
       it "return created" do
         token = auth_user["token"]
         account = {
-          description: "Testando 1",
-          user_id: user.id
+          description: "Testando 1"
         }
 
         post "/api/users/#{user.id}/accounts",
@@ -77,17 +75,17 @@ RSpec.describe "Api::V1::Accounts", type: :request do
         })
       end
 
-      it "empty user" do
+      it "invalid user" do
         token = auth_user["token"]
         account = {
           description: "Testando 1",
           status: "closed"
         }
 
-        post "/api/users/#{user.id}/accounts",
+        post "/api/users/5/accounts",
           headers: {"Authorization": "Bearer #{token}"},
-          params: {account: account}
-
+           params: {account: account}
+      
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to eq({
           "error" => "Validation failed: User must exist"
