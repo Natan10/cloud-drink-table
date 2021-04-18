@@ -104,4 +104,38 @@ RSpec.describe "Api::V1::Accounts", type: :request do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe "Total Account" do 
+    let(:account) {create(:account, status: 'open')}
+    let(:consumer) {create(:consumer,account: account)}
+    let(:items) {create_list(:item,3,price_cents: 50.0,quantity: 1,consumer: consumer) }
+    
+    context "valid account" do 
+      it 'total account' do 
+        token = auth_user["token"]
+        items
+        get "/api/users/#{user.id}/accounts/#{account.id}/account_total",
+        headers: {"Authorization": "Bearer #{token}"}
+        
+        expect(response.body).to include_json({
+          account_id:1,
+          account_total:"150.0"
+        })
+      end
+    end
+
+    context "invalid account" do
+      it 'return not found' do 
+        token = auth_user["token"]
+        items
+        get "/api/users/#{user.id}/accounts/50/account_total",
+        headers: {"Authorization": "Bearer #{token}"}
+        
+
+        expect(response.body).to include_json({
+          "error" => "Couldn't find Account with 'id'=50"
+        })
+      end
+    end
+  end
 end
