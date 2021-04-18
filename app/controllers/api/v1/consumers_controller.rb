@@ -1,7 +1,7 @@
 module Api
   module V1
     class ConsumersController < ApiController
-      before_action :set_consumer, only: [:show, :update, :destroy]
+      before_action :set_consumer, only: [:show, :update, :destroy,:total_consumer]
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
@@ -23,6 +23,10 @@ module Api
       def destroy
         @consumer.destroy
         head :ok
+      end
+
+      def total_consumer
+        render :total_consumer
       end
 
       private

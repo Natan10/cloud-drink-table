@@ -7,6 +7,9 @@ Rails.application.routes.draw do
             get :account_total
           end
           resources :consumers, only: [:show, :create, :update, :destroy] do
+            member do 
+              get :total_consumer
+            end
             resources :items, only: [:create, :update, :destroy]
           end
         end
