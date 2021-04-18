@@ -15,7 +15,6 @@ RSpec.describe "Api::V1::Consumers", type: :request do
         token = auth_user
         params = {
           name: "Natan",
-          account_id: account.id
         }
 
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
@@ -35,13 +34,13 @@ RSpec.describe "Api::V1::Consumers", type: :request do
     end
 
     context "invalid params" do
-      it "without account" do
+      it "invalid account" do
         token = auth_user
         params = {
           name: "Natan"
         }
 
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
+        post "/api/users/#{user.id}/accounts/50/consumers",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: params}
 

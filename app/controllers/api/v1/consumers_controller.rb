@@ -11,7 +11,7 @@ module Api
       end
 
       def create
-        @consumer = Consumer.create!(consumer_params)
+        @consumer = Consumer.create!(create_params)
         render :create, status: :created
       end
 
@@ -28,7 +28,11 @@ module Api
       private
 
       def consumer_params
-        params.require(:consumer).permit(:name, :total_consumed, :account_id)
+        params.require(:consumer).permit(:name, :total_consumed)
+      end
+
+      def create_params
+        consumer_params.merge(account_id: params[:account_id])
       end
 
       def set_consumer
