@@ -25,11 +25,12 @@ RSpec.describe "Api::V1::Items", type: :request do
 
         expect(response).to have_http_status(:created)
         expect(response.body).to include_json({
-          id: 1,
-          name: "Cerveja Preta",
-          quantity: 3,
-          price_cents: "1500.0",
-          consumer_id: 1
+          item: {
+            id: 1,
+            name: "Cerveja Preta",
+            quantity: 3,
+            price: "1500.0"
+          }
         })
       end
     end
@@ -69,8 +70,7 @@ RSpec.describe "Api::V1::Items", type: :request do
         params = {
           name: nil,
           quantity: 3,
-          price_cents: 18.50,
-          consumer_id: consumer.id
+          price_cents: 18.50
         }
 
         post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
@@ -113,8 +113,7 @@ RSpec.describe "Api::V1::Items", type: :request do
         params = {
           name: "Batata frita no molho",
           quantity: 2,
-          price: 22.85,
-          consumer_id: consumer.id
+          price: 22.85
         }
 
         put "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items/#{create_item.id}",

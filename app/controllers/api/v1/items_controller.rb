@@ -8,7 +8,7 @@ module Api
 
       def create
         @item = Item.create!(create_params)
-        render json: @item.to_json, status: :created
+        render :create, status: :created
       end
 
       def update
@@ -24,7 +24,7 @@ module Api
       private
 
       def item_params
-        params.require(:item).permit(:name, :quantity, :price, :consumer_id)
+        params.require(:item).permit(:name, :quantity, :price)
       end
 
       def create_params

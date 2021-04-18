@@ -9,11 +9,6 @@ Rails.application.routes.draw do
         end
       end
 
-      # resources :users, only: [:create]
-      # resources :accounts, only: [:index, :create, :destroy]
-      # resources :consumers, only: [:show, :create, :update, :destroy]
-      # resources :items, only: [:create, :update, :destroy]
-
       resources :authentication, only: [:create]
     end
   end
