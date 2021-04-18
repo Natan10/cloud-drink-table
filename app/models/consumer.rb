@@ -8,8 +8,8 @@ class Consumer < ApplicationRecord
   validates_presence_of :name
 
   def total_consumer
-    total_consumed = items.reduce(0) do |sum, num|
-      sum + num.total_price
+    total_consumed = items.reduce(0) do |sum, item|
+      sum += item.total_price
     end
   end
 end
