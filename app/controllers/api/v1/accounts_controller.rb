@@ -3,8 +3,9 @@ module Api
     class AccountsController < ApiController
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
+      rescue_from ActiveRecord::RecordNotFound, with: :invalid_account
 
-      before_action :set_account, only: [:destroy]
+      before_action :set_account, only: [:destroy,:account_total]
 
       def index
         @accounts = Account.where(user_id: @current_user.id)
@@ -19,6 +20,10 @@ module Api
       def destroy
         @account.update(status: "closed")
         head :ok
+      end
+
+      def account_total
+        render :account_total
       end
 
       private
@@ -46,6 +51,12 @@ module Api
         render json: {
           error: e.message
         }, status: :unprocessable_entity
+      end
+
+      def invalid_account(e)
+        render json: {
+          error: e.message
+        }, status: :not_found
       end
     end
   end

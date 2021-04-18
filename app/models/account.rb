@@ -8,7 +8,7 @@ class Account < ApplicationRecord
                                                 less_than_or_equal_to: 100000}
 
 
-  def total_account 
+  def account_total 
     total_account = consumers.reduce(0) do  |sum,consumer|
       sum += consumer.total_consumer
     end
