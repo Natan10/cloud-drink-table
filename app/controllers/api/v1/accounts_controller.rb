@@ -5,7 +5,7 @@ module Api
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_account
 
-      before_action :set_account, only: [:destroy,:account_total]
+      before_action :set_account, only: [:destroy, :account_total]
 
       def index
         @accounts = Account.where(user_id: @current_user.id)
