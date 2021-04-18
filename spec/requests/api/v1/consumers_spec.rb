@@ -9,7 +9,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
   let(:user) { create(:user) }
   let(:account) { create(:account, user: user) }
 
-  describe "create" do
+  describe "POST /create" do
     context "valid params" do
       it "return created" do
         token = auth_user
@@ -65,7 +65,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
     end
   end
 
-  describe "update" do
+  describe "PUT /update" do
     let(:create_consumer) { create(:consumer, account: account) }
 
     context "valid params" do
@@ -111,7 +111,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
     end
   end
 
-  describe "show" do
+  describe "GET /show" do
     let(:consumer) { create(:consumer, account: account) }
 
     it "valid id" do
@@ -137,7 +137,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
     end
   end
 
-  describe "delete" do
+  describe "DELETE /delete" do
     it "return 200" do
       token = auth_user
       consumer = create(:consumer, account: account)
@@ -155,6 +155,39 @@ RSpec.describe "Api::V1::Consumers", type: :request do
         headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "GET /total_consumed" do 
+    let(:account) { create(:account, status: "open") }
+    let(:consumer) { create(:consumer, account: account) }
+    let(:items) { create_list(:item, 3, price_cents: 50.0, quantity: 1, consumer: consumer) }
+
+    context 'valid consumer' do
+      it 'total consumed' do
+        token = auth_user
+        items
+        get "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/total_consumer",
+          headers: {"Authorization": "Bearer #{token}"}
+        
+        expect(response.body).to include_json({
+          consumer_id:1,
+          total_consumer: "150.0"
+        })   
+      end
+    end
+
+    context "invalid consumer" do
+      it 'not found' do
+        token = auth_user
+        items
+        get "/api/users/#{user.id}/accounts/#{account.id}/consumers/100/total_consumer",
+          headers: {"Authorization": "Bearer #{token}"}
+        
+        expect(response.body).to include_json({
+          "error" => "Couldn't find Consumer with 'id'=100"
+        })   
+      end
     end
   end
 end
