@@ -6,14 +6,14 @@ module Api
       rescue_from ActiveRecord::RecordInvalid, with: :validation_error
 
       def create
-        User.create!(user_params)
-        head :created
+        @user = User.create!(user_params)
+        render :create , status: :created
       end
 
       private
 
       def user_params
-        params.require(:user).permit(:username, :email, :password, :password_confirmation)
+        params.require(:user).permit(:username, :email, :password, :password_confirmation,:photo)
       end
 
       def parameter_missing(e)
