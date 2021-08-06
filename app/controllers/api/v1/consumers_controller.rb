@@ -1,17 +1,17 @@
 module Api
   module V1
     class ConsumersController < ApiController
-      before_action :set_consumer, only: [:show, :update, :destroy,:total_consumer]
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
+      before_action :set_consumer, only: [:show, :update, :destroy,:total_consumer]
 
       def show
         render :show
       end
 
       def create
-        @consumer = Consumer.create!(create_params)
+        @consumer = Consumer.create!(consumer_params)
         render :create, status: :created
       end
 
@@ -32,11 +32,7 @@ module Api
       private
 
       def consumer_params
-        params.require(:consumer).permit(:name, :total_consumed)
-      end
-
-      def create_params
-        consumer_params.merge(account_id: params[:account_id])
+        params.require(:consumer).permit(:name, :total_consumed,:account_id)
       end
 
       def set_consumer

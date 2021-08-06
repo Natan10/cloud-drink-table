@@ -1,6 +1,6 @@
 class Consumer < ApplicationRecord
   belongs_to :account
-  has_many :items
+  has_many :items, dependent: :destroy
 
   monetize :total_consumed_cents, numericality: {greater_than_or_equal_to: 0,
                                                  less_than_or_equal_to: 100000}
