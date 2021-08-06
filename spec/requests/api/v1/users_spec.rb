@@ -38,4 +38,54 @@ RSpec.describe "Api::V1::Users", type: :request do
       end
     end
   end
+
+  describe "PUT" do 
+    subject(:auth_user) do
+      post "/api/authentication", params: {user: {email: user.email, password: user.password}}
+      token = response.body
+      JSON.parse(token)
+    end
+    let(:user) { create(:user, photo: photo) }
+    
+    let(:photo) { fixture_file_upload("beagle.jpg") }
+    let(:updated_photo) { fixture_file_upload("bulldog.jpg") }
+    
+    it "valid params" do
+      token = auth_user["token"]
+      params = {
+        username: "teste1",
+        photo: updated_photo
+      }
+
+      put "/api/users/#{user.id}",
+      params: {user: params}, 
+      headers: {"Authorization": "Bearer #{token}"}
+
+      expect(response).to have_http_status(:ok)  
+    end
+
+    it "invalid user" do 
+      token = auth_user["token"]
+      params = {
+        username: "teste1",
+        photo: updated_photo
+      }
+
+      put "/api/users/100",
+      params: {user: params}, 
+      headers: {"Authorization": "Bearer #{token}"}
+
+      expect(response).to have_http_status(:not_found)  
+    end
+
+    it "whitout params" do 
+      token = auth_user["token"]
+      put "/api/users/#{user.id}",
+      params: {user: {}}, 
+      headers: {"Authorization": "Bearer #{token}"}
+
+      expect(response).to have_http_status(:unprocessable_entity) 
+    end
+
+  end
 end
