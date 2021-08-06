@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       #   end
       # end
 
-      resources :users, only: [:create]
+      resources :users, only: [:create, :update]
       resources :accounts, only: [:index, :create, :destroy] do
         member do
           get :account_total
