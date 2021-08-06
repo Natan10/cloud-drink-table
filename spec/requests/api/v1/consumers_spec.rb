@@ -14,10 +14,11 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       it "return created" do
         token = auth_user
         params = {
-          name: "Natan"
+          name: "Natan",
+          account_id: account.id,
         }
 
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
+        post "/api/consumers",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: params}
 
@@ -40,7 +41,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
           name: "Natan"
         }
 
-        post "/api/users/#{user.id}/accounts/50/consumers",
+        post "/api/consumers",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: params}
 
@@ -53,7 +54,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       it "without params" do
         token = auth_user
 
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers",
+        post "/api/consumers",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: {}}
 
@@ -76,7 +77,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
           name: "CIBORGUE"
         }
 
-        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+        patch "/api/consumers/#{consumer.id}",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: params}
 
@@ -89,7 +90,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
         token = auth_user
         consumer = create_consumer
 
-        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+        patch "/api/consumers/#{consumer.id}",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: {}}
 
@@ -99,7 +100,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       it "wrong id" do
         token = auth_user
 
-        patch "/api/users/#{user.id}/accounts/#{account.id}/consumers/999",
+        patch "/api/consumers/999",
           headers: {"Authorization": "Bearer #{token}"},
           params: {consumer: {}}
 
@@ -118,7 +119,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       token = auth_user
       create_list(:item, 3, consumer: consumer)
 
-      get "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+      get "/api/consumers/#{consumer.id}",
         headers: {"Authorization": "Bearer #{token}"}
       expect(response).to have_http_status(200)
     end
@@ -127,7 +128,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       token = auth_user
       create_list(:item, 3, consumer: consumer)
 
-      get "/api/users/#{user.id}/accounts/#{account.id}/consumers/5",
+      get "/api/consumers/5",
         headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(404)
@@ -142,7 +143,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       token = auth_user
       consumer = create(:consumer, account: account)
 
-      delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}",
+      delete "/api/consumers/#{consumer.id}",
         headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:ok)
@@ -151,7 +152,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
     it "return 404" do
       token = auth_user
 
-      delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/500",
+      delete "/api/consumers/500",
         headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:not_found)
@@ -167,7 +168,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       it 'total consumed' do
         token = auth_user
         items
-        get "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/total_consumer",
+        get "/api/consumers/#{consumer.id}/total_consumer",
           headers: {"Authorization": "Bearer #{token}"}
         
         expect(response.body).to include_json({
@@ -181,7 +182,7 @@ RSpec.describe "Api::V1::Consumers", type: :request do
       it 'not found' do
         token = auth_user
         items
-        get "/api/users/#{user.id}/accounts/#{account.id}/consumers/100/total_consumer",
+        get "/api/consumers/100/total_consumer",
           headers: {"Authorization": "Bearer #{token}"}
         
         expect(response.body).to include_json({
