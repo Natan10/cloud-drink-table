@@ -17,9 +17,10 @@ RSpec.describe "Api::V1::Items", type: :request do
         params = {
           name: "Cerveja Preta",
           quantity: 3,
-          price: 15
+          price: 15,
+          consumer_id: consumer.id
         }
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
+        post "/api/items",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -38,7 +39,7 @@ RSpec.describe "Api::V1::Items", type: :request do
     context "invalid params" do
       it "whitout params" do
         token = auth_user
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
+        post "/api/items",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: {}}
 
@@ -53,9 +54,10 @@ RSpec.describe "Api::V1::Items", type: :request do
         params = {
           name: "Cerveja Preta",
           quantity: 3,
-          price_cents: 18.50
+          price_cents: 18.50,
+          consumer_id: "50"
         }
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/50/items",
+        post "/api/items",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -70,10 +72,11 @@ RSpec.describe "Api::V1::Items", type: :request do
         params = {
           name: nil,
           quantity: 3,
-          price_cents: 18.50
+          price_cents: 18.50,
+          consumer_id: consumer.id
         }
 
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
+        post "/api/items",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -92,7 +95,7 @@ RSpec.describe "Api::V1::Items", type: :request do
           consumer_id: consumer.id
         }
 
-        post "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items",
+        post "/api/items",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -116,7 +119,7 @@ RSpec.describe "Api::V1::Items", type: :request do
           price: 22.85
         }
 
-        put "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items/#{create_item.id}",
+        put "/api/items/#{create_item.id}",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -135,7 +138,7 @@ RSpec.describe "Api::V1::Items", type: :request do
           consumer_id: consumer.id
         }
 
-        put "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items/#{create_item.id}",
+        put "/api/items/#{create_item.id}",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -152,7 +155,7 @@ RSpec.describe "Api::V1::Items", type: :request do
           consumer_id: consumer.id
         }
 
-        put "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items/10",
+        put "/api/items/10",
           headers: {"Authorization": "Bearer #{token}"},
           params: {item: params}
 
@@ -166,7 +169,7 @@ RSpec.describe "Api::V1::Items", type: :request do
       token = auth_user
       item = create(:item, consumer: consumer)
 
-      delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items/#{item.id}",
+      delete "/api/items/#{item.id}",
         headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:ok)
@@ -175,7 +178,7 @@ RSpec.describe "Api::V1::Items", type: :request do
     it "return 404" do
       token = auth_user
 
-      delete "/api/users/#{user.id}/accounts/#{account.id}/consumers/#{consumer.id}/items/5",
+      delete "/api/items/5",
         headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(404)
