@@ -13,7 +13,7 @@ module Api
       end
 
       def create
-        @account = Account.create!(create_params)
+        @account = Account.create!(account_params)
         render :create, status: :created
       end
 
@@ -34,12 +34,10 @@ module Api
       end
 
       def account_params
-        params.require(:account).permit(:total_account_cents, :status, :description)
+        params.require(:account)
+        .permit(:total_account_cents, :status, :description,:user_id)
       end
 
-      def create_params
-        account_params.merge(user_id: params[:user_id])
-      end
 
       def parameter_missing(e)
         render json: {

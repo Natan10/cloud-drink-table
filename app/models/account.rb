@@ -1,6 +1,6 @@
 class Account < ApplicationRecord
   belongs_to :user
-  has_many :consumers
+  has_many :consumers, dependent: :destroy
 
   enum status: [:open, :closed]
 
