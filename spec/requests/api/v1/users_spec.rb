@@ -8,7 +8,8 @@ RSpec.describe "Api::V1::Users", type: :request do
         headers: {"ACCEPT" => "application/json"}
     }
 
-    let(:user_params) { attributes_for(:user) }
+    let(:photo) { fixture_file_upload("beagle.jpg") }
+    let(:user_params) { attributes_for(:user, photo: photo) }
 
     context "valid user" do
       it "valid params" do
