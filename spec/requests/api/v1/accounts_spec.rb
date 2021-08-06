@@ -19,7 +19,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
       it "list accounts current_user" do
         token = auth_user["token"]
         accounts
-        get "/api/users/#{user.id}/accounts", headers: {"Authorization": "Bearer #{token}"}
+        get "/api/accounts", headers: {"Authorization": "Bearer #{token}"}
 
         accounts = JSON.parse(response.body)
         expect(response).to have_http_status(200)
@@ -40,10 +40,11 @@ RSpec.describe "Api::V1::Accounts", type: :request do
       it "return created" do
         token = auth_user["token"]
         account = {
-          description: "Testando 1"
+          description: "Testando 1",
+          user_id: user.id,
         }
 
-        post "/api/users/#{user.id}/accounts",
+        post "/api/accounts",
           headers: {"Authorization": "Bearer #{token}"},
           params: {account: account}
 
@@ -65,7 +66,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
         token = auth_user["token"]
         account = {}
 
-        post "/api/users/#{user.id}/accounts",
+        post "/api/accounts",
           headers: {"Authorization": "Bearer #{token}"},
           params: {account: account}
 
@@ -74,15 +75,17 @@ RSpec.describe "Api::V1::Accounts", type: :request do
           "error" => "param is missing or the value is empty: account"
         })
       end
+    
 
       it "invalid user" do
         token = auth_user["token"]
         account = {
           description: "Testando 1",
-          status: "closed"
+          status: "closed",
+          user_id: "5"
         }
 
-        post "/api/users/5/accounts",
+        post "/api/accounts",
           headers: {"Authorization": "Bearer #{token}"},
           params: {account: account}
 
@@ -99,7 +102,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
 
     it "return ok" do
       token = auth_user["token"]
-      delete "/api/users/#{user.id}/accounts/#{account.id}", headers: {"Authorization": "Bearer #{token}"}
+      delete "/api/accounts/#{account.id}", headers: {"Authorization": "Bearer #{token}"}
 
       expect(response).to have_http_status(:ok)
     end
@@ -114,7 +117,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
       it "total account" do
         token = auth_user["token"]
         items
-        get "/api/users/#{user.id}/accounts/#{account.id}/account_total",
+        get "/api/accounts/#{account.id}/account_total",
           headers: {"Authorization": "Bearer #{token}"}
 
         expect(response.body).to include_json({
@@ -128,7 +131,7 @@ RSpec.describe "Api::V1::Accounts", type: :request do
       it "return not found" do
         token = auth_user["token"]
         items
-        get "/api/users/#{user.id}/accounts/50/account_total",
+        get "/api/accounts/50/account_total",
           headers: {"Authorization": "Bearer #{token}"}
 
         expect(response.body).to include_json({
