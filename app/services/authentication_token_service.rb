@@ -2,7 +2,7 @@ class AuthenticationTokenService
   @token_conf = Rails.application.credentials.token
 
   def self.encode(user_id)
-    exp = (Time.now + 30.minutes).to_i
+    exp = (Time.now + 60.minutes).to_i
     payload = {user_id: user_id, exp: exp}
     JWT.encode payload, @token_conf[:token_secret], @token_conf[:token_type]
   end
