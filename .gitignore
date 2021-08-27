@@ -34,3 +34,6 @@
 
 /config/credentials/test.key
 coverage
+
+.env 
+*.env
