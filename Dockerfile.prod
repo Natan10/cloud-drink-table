@@ -1,0 +1,20 @@
+FROM ruby:2.6.7
+
+RUN apt-get update -qq 
+
+WORKDIR /app 
+
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler --no-document
+RUN bundle install --jobs 20 --retry 5 --without development test
+
+
+ENV RAILS_ENV production
+ENV RACK_ENV production
+
+COPY . .
+
+EXPOSE 3000 
+
+# Start the main process.
+CMD ["rails", "server", "-b", "0.0.0.0"]
