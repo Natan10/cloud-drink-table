@@ -26,6 +26,9 @@ Rails.application.routes.draw do
           get :total_consumer
         end
       end
+
+      resources :restaurants, only: [:index,:create,:update,:destroy] 
+
       resources :items, only: [:create, :update, :destroy]
       
       resources :authentication, only: [:create]

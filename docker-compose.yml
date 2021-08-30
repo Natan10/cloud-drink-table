@@ -17,6 +17,7 @@ services:
       PG_HOST: db
       PG_USER: postgres
       PG_PASSWORD: password
+      RAILS_ENV: development
     env_file:
       - .env
     command: > 
