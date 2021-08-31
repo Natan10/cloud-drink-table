@@ -1,45 +1,37 @@
 module Api
   module V1
-    class RestaurantsController < ApiController
+    class ProductsController < ApiController
       skip_before_action :authenticate_user
-      before_action :set_restaurant, only: [:update, :destroy,:show]
+      before_action :set_product, only: [:update, :destroy]
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from ActiveRecord::RecordInvalid, with: :validation_user
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
 
-      def index 
-        @restaurants = Restaurant.all
-        render :index
-      end
-
-      def show 
-        render :show 
-      end
       
       def create
-        @restaurant = Restaurant.create!(restaurant_params)
-        render :create, status: :created
+        @product = Product.create!(product_params)
+        head :created
       end
 
       def update
-        @restaurant.update!(restaurant_params)
+        @product.update!(product_params)
         head :ok
       end
 
       def destroy
-        @restaurant.destroy
+        @product.destroy
         head :ok
       end
 
       private
 
-      def restaurant_params
-        params.require(:restaurant)
-        .permit(:name,:logo)
+      def product_params
+        params.require(:product)
+        .permit(:name,:description,:price,:restaurant_id,:photo)
       end
 
-      def set_restaurant
-        @restaurant = Restaurant.find(params[:id])
+      def set_product
+        @product = Product.find(params[:id])
       end
 
       def parameter_missing(e)
@@ -62,4 +54,3 @@ module Api
     end
   end
 end
-

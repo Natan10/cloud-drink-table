@@ -27,7 +27,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :restaurants, only: [:index,:create,:update,:destroy] 
+      resources :restaurants, only: [:index,:create,:update,:destroy,:show] 
+      resources :products, only: [:create,:update,:destroy] 
 
       resources :items, only: [:create, :update, :destroy]
       
