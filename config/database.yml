@@ -4,10 +4,10 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 #
-# default: &default
-#   adapter: sqlite3
-#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#   timeout: 5000
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 # development:
 #   <<: *default
@@ -23,13 +23,16 @@
 # production:
 #   <<: *default
 #   database: db/production.sqlite3
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: <%= ENV["PG_HOST"] %>
-  username: <%= ENV["PG_USER"] %>
-  password: <%= ENV["PG_PASSWORD"] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+
+# Docker Postgres
+# default: &default
+#   adapter: postgresql
+#   encoding: unicode
+#   host: <%= ENV["PG_HOST"] %>
+#   username: <%= ENV["PG_USER"] %>
+#   password: <%= ENV["PG_PASSWORD"] %>
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
