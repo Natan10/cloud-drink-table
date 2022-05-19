@@ -3,7 +3,7 @@ module Api
     class UsersController < ApiController
       skip_before_action :authenticate_user, only: [:create]
       before_action :set_user, only: [:update]
-      #rescue_from ActionController::ParameterMissing, with: :render_parameter_missing
+      
       rescue_from ActiveRecord::RecordInvalid, with: :validation_error
       rescue_from ActiveRecord::RecordNotFound, with: :invalid_user
 
@@ -24,11 +24,13 @@ module Api
       def update 
         @user.update!(user_params)
         render :update, status: :ok
+      rescue ActionController::ParameterMissing => ex 
+        render_parameter_missing(ex)
       end
 
       private
 
-      def set_user  
+      def set_user
         @user = User.find(params[:id])
       end
 
