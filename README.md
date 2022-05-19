@@ -1,24 +1,16 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Assuntos para Estudar em Rails
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* redis
+* rabbitMq
+* Sidekiq
+* AWS
+* Elastic Search
+* U - Case
+* Clean Arch
+* Solid
+* Outras Arquiteturas
+* Autenticação Two - Factor
+* Action Cable
+* Websocket

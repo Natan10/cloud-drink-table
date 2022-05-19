@@ -22,7 +22,7 @@ RSpec.describe "Api::V1::Users", type: :request do
       let(:user_params) { nil }
 
       it "without params" do
-        create_user
+        create_user  
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to eq({
           "error" => "param is missing or the value is empty: user"
@@ -83,7 +83,7 @@ RSpec.describe "Api::V1::Users", type: :request do
       put "/api/users/#{user.id}",
       params: {user: {}}, 
       headers: {"Authorization": "Bearer #{token}"}
-
+      
       expect(response).to have_http_status(:unprocessable_entity) 
     end
 
