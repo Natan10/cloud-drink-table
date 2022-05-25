@@ -13,7 +13,11 @@ RSpec.describe "Api::V1::Users", type: :request do
 
     context "valid user" do
       it "valid params" do
-        create_user
+        
+        expect {
+          create_user
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
+        
         expect(response).to have_http_status(:created)
       end
     end

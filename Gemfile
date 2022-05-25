@@ -42,6 +42,8 @@ group :development, :test do
   gem "shoulda-matchers", "~> 4.0"
   gem "rspec-json_expectations"
   gem "simplecov", require: false
+
+  gem "letter_opener", group: :development
 end
 
 group :development do

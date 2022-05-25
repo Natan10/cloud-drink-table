@@ -9,7 +9,7 @@ module UserCases
     attribute :photo
 
     def call!  
-      validate_params.then(:create_user)     
+      validate_params.then(:create_user)
     end
 
     private
@@ -33,10 +33,15 @@ module UserCases
       )
 
       if user.save
+        send_email
         return Success result: {user: user}
       end
 
       Failure :user_create_error, result: {errors: user.erros} 
+    end
+
+    def send_email
+      UserMailer.with(name: username, email: email).user_created_email.deliver_later
     end
   end
 end
