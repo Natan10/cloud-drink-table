@@ -7,12 +7,7 @@ module Api
       def create
         UserCases::Create.call(user_params.to_h)
         .on_success{ |result| render_action_and_status(action: :create, user: result[:user], status: :created) }
-        .on_failure(:parameter_missing) { |result| render_error_msg(result[:msg]) }
-        .on_failure(:username_empty) { |_| render_error_msg('username was not passed!') } 
-        .on_failure(:email_empty) { |_| render_error_msg('email was not pass!') } 
-        .on_failure(:password_empty) { |_| render_error_msg('password was not pass!') } 
-        .on_failure(:password_confirmation_empty) { |_| render_error_msg('password_confirmation was not pass!') } 
-        .on_failure(:password_error) { |_| render_error_msg('password and password_confirmation different!') } 
+        .on_failure(:user_create_error) { |result| render_error_msg(result[:errors]) }
       rescue ActionController::ParameterMissing => ex 
         render_error_msg(ex)
       end
@@ -33,7 +28,13 @@ module Api
       end
 
       def render_action_and_status(action: , user:, status:)
-        render action ,locals: {user: user}, status: status
+        user_view = { 
+          id: user.id,
+          username: user.username,
+          email: user.email, 
+          photo: user.photo.attached? ? rails_blob_path(user.photo,only_path: true) : nil 
+        }
+        render action ,locals: {user: user_view}, status: status
       end
       
       def render_error_msg(msg, status: :unprocessable_entity)
