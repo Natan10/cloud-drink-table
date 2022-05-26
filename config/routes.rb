@@ -1,21 +1,10 @@
 Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     scope module: :v1 do
-      # resources :users, only: [:create] do
-      #   resources :accounts, only: [:index, :create, :destroy] do
-      #     member do
-      #       get :account_total
-      #     end
-      #     resources :consumers, only: [:show, :create, :update, :destroy] do
-      #       member do 
-      #         get :total_consumer
-      #       end
-      #       resources :items, only: [:create, :update, :destroy]
-      #     end
-      #   end
-      # end
+      
+      post '/users', to: 'users#create'
+      put '/users/:id', to: 'users#update', as: 'user'
 
-      resources :users, only: [:create, :update]
       resources :accounts, only: [:index, :create, :destroy] do
         member do
           get :account_total
