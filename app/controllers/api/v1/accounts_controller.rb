@@ -8,8 +8,16 @@ module Api
       before_action :set_account, only: [:destroy, :account_total]
 
       def index
-        @accounts = Account.where(user_id: @current_user.id)
-        render :index
+        ::Account::GetAccountsByUser.call(user_id: @current_user.id)
+          .on_success do |result|
+            render :index, locals: {
+              user: {
+                username: @current_user.username,
+                email: @current_user.email,
+                accounts: result[:accounts]
+              }
+            }
+          end      
       end
 
       def create
