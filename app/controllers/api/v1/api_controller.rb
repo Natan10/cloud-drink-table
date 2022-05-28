@@ -11,7 +11,7 @@ module Api
 
       def authenticate_user
         user_id = AuthenticationTokenService.decode(token_request)
-        @current_user = User.find(user_id["user_id"])
+        @current_user = ::User::User.find(user_id["user_id"])
         @current_user
       rescue ActiveRecord::RecordNotFound, JWT::ExpiredSignature
         head :unauthorized

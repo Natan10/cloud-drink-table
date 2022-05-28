@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 module Api
   module V1
     class UsersController < ApiController
       skip_before_action :authenticate_user, only: [:create]
       
       def create
-        UserCases::Create.call(user_params.to_h)
+        ::User::Create.call(user_params.to_h)
         .on_success{ |result| render_action_and_status(action: :create, user: result[:user], status: :created) }
         .on_failure(:user_create_error) { |result| render_error_msg(result[:errors]) }
       rescue ActionController::ParameterMissing => ex 
@@ -13,7 +14,7 @@ module Api
       end
 
       def update 
-        UserCases::Update.call(id: params[:id],params: user_params)
+        ::User::Update.call(id: params[:id],params: user_params)
         .on_success { |result| render_action_and_status(action: :update,user: result[:user], status: :ok) }
         .on_failure(:user_not_found) { |result| render_error_msg(result[:msg], status: :not_found)}
         .on_failure(:parameter_missing) { |result| render_error_msg(result[:msg]) }

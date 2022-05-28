@@ -49,18 +49,19 @@ RSpec.describe "Api::V1::Users", type: :request do
       token = response.body
       JSON.parse(token)
     end
-    let(:user) { create(:user, photo: photo) }
-    
     let(:photo) { fixture_file_upload("beagle.jpg") }
     let(:updated_photo) { fixture_file_upload("bulldog.jpg") }
+    let(:user) { create(:user, photo: photo) }
+    
     
     it "valid params" do
+      
       token = auth_user["token"]
       params = {
         username: "teste1",
         photo: updated_photo
       }
-
+  
       put "/api/users/#{user.id}",
       params: {user: params}, 
       headers: {"Authorization": "Bearer #{token}"}
